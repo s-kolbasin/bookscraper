@@ -4,8 +4,6 @@ public class Scraper
 {
     private readonly string rootUrl;
     private readonly string destination;
-    private HashSet<string> allPages = new HashSet<string>(1000);
-    private Queue<string> pagesToScrape = new Queue<string>(1000);
 
     public Scraper (string rootUrl, string destination) => (this.rootUrl, this.destination) = (rootUrl, destination);
 
