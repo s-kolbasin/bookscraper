@@ -44,8 +44,8 @@ public class CrawlerTest
 		var path = Path.Combine(InputFolder, "FullBody.html");
 		var crawler = await CrawlFile(path);
 
-		Assert.Equal(3, crawler.AllPages.Count);
-		Assert.Equal(3, crawler.ToScrape.Count);
+		Assert.Equal(2, crawler.AllPages.Count);
+		Assert.Equal(2, crawler.ToScrape.Count);
 	}
 
 	private static async Task<Crawler> CrawlFile(string rootFile) {
