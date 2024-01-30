@@ -4,42 +4,54 @@ namespace Bookscraper.Tests;
 
 public class CrawlerTest
 {
-    private const string InputFolder = @"..\..\..\Bookscraper.Tests\Input";
+	private const string InputFolder = @"..\..\..\Input";
 
-    [Fact]
-    public async void WhenRootIsEmpty_ListsRoot()
-    {
-        var path = Path.Combine(InputFolder, "EmptyRoot.html");
-        var crawler = await CrawlFile(path);
+	[Fact]
+	public async void WhenRootIsEmpty_ListsRoot()
+	{
+		var path = Path.Combine(InputFolder, "EmptyRoot.html");
+		var crawler = await CrawlFile(path);
 
-        Assert.Single(crawler.AllPages);
-        Assert.Single(crawler.ToScrape);
-        Assert.Equal(path, crawler.AllPages.Single());
-        Assert.Equal(path, crawler.ToScrape.Single());
-    }
+		Assert.Single(crawler.AllPages);
+		Assert.Single(crawler.ToScrape);
+		Assert.Equal(path, crawler.AllPages.Single());
+		Assert.Equal(path, crawler.ToScrape.Single());
+	}
 
-    [Fact]
-    public void WhenHasLinks_ListsRootAndLinks()
-    {
+	[Fact]
+	public async Task WhenHasLinks_ListsRootAndLinksAsync()
+	{
+		var path = Path.Combine(InputFolder, "SomeLinks.html");
+		var crawler = await CrawlFile(path);
 
-    }
+		Assert.Equal(3, crawler.AllPages.Count);
+		Assert.Equal(3, crawler.ToScrape.Count);
+	}
 
-    [Fact]
-    public void WhenHasSecondaryLinks_ListsAllLinks()
-    {
+	[Fact]
+	public async Task WhenHasSecondaryLinks_ListsAllLinksAsync()
+	{
+		var path = Path.Combine(InputFolder, "RecursiveLinks.html");
+		var crawler = await CrawlFile(path);
 
-    }
+		Assert.Equal(3, crawler.AllPages.Count);
+		Assert.Equal(3, crawler.ToScrape.Count);
+	}
 
-    [Fact]
-    public void WhenHasResourceHrefs_ListsOnlyLinks()
-    {
+	[Fact]
+	public async Task WhenHasResourceHrefs_ListsOnlyLinksAsync()
+	{
+		var path = Path.Combine(InputFolder, "FullBody.html");
+		var crawler = await CrawlFile(path);
 
-    }
+		Assert.Equal(3, crawler.AllPages.Count);
+		Assert.Equal(3, crawler.ToScrape.Count);
+	}
 
-    private async Task<Crawler> CrawlFile(string rootFile) {
-        // TODO: IoC?
-        Crawler crawler = new (rootFile, new FileHtmlClient());
-        await crawler.CrawlAsync();
-        return crawler;
-    }
+	private static async Task<Crawler> CrawlFile(string rootFile) {
+		// TODO: IoC?
+		Crawler crawler = new (rootFile, new FileHtmlClient());
+		await crawler.CrawlAsync();
+		return crawler;
+	}
 }
