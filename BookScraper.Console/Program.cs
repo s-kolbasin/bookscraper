@@ -1,6 +1,15 @@
 ﻿using BookScraper.Lib;
 
-var scraper = new Scraper(@"https://books.toscrape.com/", @"C:\Temp\scraps\");
+string rooUrl = @"https://books.toscrape.com/";
+string targetFolder = @"C:\Temp\scraps\";
+
+if (args.Length > 2)
+{
+	rooUrl = args[1];
+	targetFolder = args[2];
+}
+
+var scraper = new Scraper(rooUrl, targetFolder);
 var scrapeTask = Task.Run(scraper.ScrapeAsync);
 
 while (!scrapeTask.IsCompleted)
