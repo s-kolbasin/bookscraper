@@ -15,7 +15,7 @@ public class CrawlerTest
 		Assert.Single(crawler.AllPages);
 		Assert.Single(crawler.ToScrape);
 		Assert.Equal(path, crawler.AllPages.Single());
-		Assert.Equal(path, crawler.ToScrape.Single());
+		Assert.Equal(path, crawler.ToScrape.Single().FullUrl);
 	}
 
 	[Fact]

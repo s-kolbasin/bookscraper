@@ -18,7 +18,7 @@ public sealed class Crawler : ICrawler
 
 	public Crawler(string root, IHtmlClient htmlClient) => (this.root, this.htmlClient) = (root, htmlClient);
 	public HashSet<string> AllPages { get; } = new HashSet<string>(EstimatedPages);
-	public Queue<string> ToScrape { get; } = new Queue<string>(EstimatedPages);
+	public Queue<Page> ToScrape { get; } = new Queue<Page>(EstimatedPages);
 
 	public async Task CrawlAsync() => await VisitPageAsync(root);
 
@@ -36,7 +36,12 @@ public sealed class Crawler : ICrawler
 		if (pageSource != default) {
 			if (AllPages.Add(fullUrl))
 			{
-				ToScrape.Enqueue(fullUrl);
+				ToScrape.Enqueue(
+					new Page() {
+						FullUrl = fullUrl,
+						HtmlSource = pageSource
+					}
+				);
 
 				var links = ParseForLinks(pageSource)
 					.Select(reference => htmlClient.CombinePath(fullUrl, reference));
