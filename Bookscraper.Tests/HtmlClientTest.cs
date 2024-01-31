@@ -13,6 +13,12 @@ namespace Bookscraper.Tests
 		}
 
 		[Fact]
+		public void WhenCurrentEndsInIndex_RemoveIndex()
+		{
+			AssertCombinesPath("books.toscrape.com/index.html", "travel", "books.toscrape.com/travel");
+		}
+
+		[Fact]
 		public void WhenLocalRefGoesUp_GoUp()
 		{
 			// TODO: Can we simplify? This should work, but of course not ideal, since we'd visit some pages multiple times
