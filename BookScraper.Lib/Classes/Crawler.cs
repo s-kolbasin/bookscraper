@@ -16,9 +16,16 @@ public sealed class Crawler : ICrawler
 	private readonly string root;
 	private readonly IHtmlClient htmlClient;
 
-	public Crawler(string root, IHtmlClient htmlClient) => (this.root, this.htmlClient) = (root, htmlClient);
+	public Crawler(string root, IHtmlClient htmlClient)
+	{
+		this.root = root;
+		this.htmlClient = htmlClient;
+
+		var pageQueue = new Queue<Page>(EstimatedPages);
+		ToScrape = new CrawledQueue() { PageQueue = pageQueue, Finished = false };
+	}
 	public HashSet<string> AllPages { get; } = new HashSet<string>(EstimatedPages);
-	public Queue<Page> ToScrape { get; } = new Queue<Page>(EstimatedPages);
+	public CrawledQueue ToScrape { get; }
 
 	public async Task CrawlAsync() => await VisitPageAsync(root);
 
@@ -36,7 +43,7 @@ public sealed class Crawler : ICrawler
 		if (pageSource != default) {
 			if (AllPages.Add(fullUrl))
 			{
-				ToScrape.Enqueue(
+				ToScrape.PageQueue.Enqueue(
 					new Page() {
 						FullUrl = fullUrl,
 						HtmlSource = pageSource
@@ -50,6 +57,7 @@ public sealed class Crawler : ICrawler
 					.Select(linkPath => Task.Run(() => VisitPageAsync(linkPath)))
 					.ToArray();
 				await Task.WhenAll(parseLinkTasks);
+				ToScrape.Finished = true;
 			}
 		}
 	}

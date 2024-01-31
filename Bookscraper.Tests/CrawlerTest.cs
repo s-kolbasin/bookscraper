@@ -13,9 +13,9 @@ public class CrawlerTest
 		var crawler = await CrawlFile(path);
 
 		Assert.Single(crawler.AllPages);
-		Assert.Single(crawler.ToScrape);
+		Assert.Single(crawler.ToScrape.PageQueue);
 		Assert.Equal(path, crawler.AllPages.Single());
-		Assert.Equal(path, crawler.ToScrape.Single().FullUrl);
+		Assert.Equal(path, crawler.ToScrape.PageQueue.Single().FullUrl);
 	}
 
 	[Fact]
@@ -25,7 +25,7 @@ public class CrawlerTest
 		var crawler = await CrawlFile(path);
 
 		Assert.Equal(3, crawler.AllPages.Count);
-		Assert.Equal(3, crawler.ToScrape.Count);
+		Assert.Equal(3, crawler.ToScrape.PageQueue.Count);
 	}
 
 	[Fact]
@@ -35,7 +35,7 @@ public class CrawlerTest
 		var crawler = await CrawlFile(path);
 
 		Assert.Equal(3, crawler.AllPages.Count);
-		Assert.Equal(3, crawler.ToScrape.Count);
+		Assert.Equal(3, crawler.ToScrape.PageQueue.Count);
 	}
 
 	[Fact]
@@ -45,7 +45,7 @@ public class CrawlerTest
 		var crawler = await CrawlFile(path);
 
 		Assert.Equal(2, crawler.AllPages.Count);
-		Assert.Equal(2, crawler.ToScrape.Count);
+		Assert.Equal(2, crawler.ToScrape.PageQueue.Count);
 	}
 
 	private static async Task<Crawler> CrawlFile(string rootFile) {

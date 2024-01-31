@@ -8,10 +8,11 @@ public class Scraper
 	private readonly Downloader downloader;
 
 	public int TotalPages => crawler.AllPages.Count;
+	public int ProcessedPages => TotalPages - crawler.ToScrape.PageQueue.Count;
 
 	public Scraper(string rootUrl, string destination) {
 		crawler = new(rootUrl, new WebHtmlClient());
-		downloader = new(destination, crawler.ToScrape);
+		downloader = new(rootUrl, destination, crawler.ToScrape);
 	}
 
 	public async Task ScrapeAsync() {
